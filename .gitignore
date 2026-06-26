@@ -1,0 +1,23 @@
+# system noise
+.cache/
+.bash_history
+*.swp
+*.tmp
+*.log
+
+# python
+__pycache__/
+*.pyc
+
+# env
+.env
+.venv/
+
+# outputs
+figures/
+paper/build/
+paper/output/
+
+# os junk
+.DS_Store
+.Xauthority
