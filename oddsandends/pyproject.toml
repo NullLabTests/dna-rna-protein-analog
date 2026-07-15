@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oddsandends"
+version = "0.1.0"
+description = "Swiss Army knife of AI/LLM utilities — token counting, cost estimation, prompt templating, and more"
+license = {text = "MIT"}
+authors = [
+    {name = "NullLabTests"}
+]
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.0",
+    "rich>=13.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+tiktoken = ["tiktoken>=0.7"]
+all = ["oddsandends[tiktoken]"]
+
+[project.scripts]
+odds = "oddsandends.cli:cli"
+
+[tool.setuptools.packages.find]
+include = ["oddsandends*"]
