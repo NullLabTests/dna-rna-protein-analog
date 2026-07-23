@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" font-family="system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0f0c29"/><stop offset="100%" stop-color="#24243e"/></linearGradient>
+    <linearGradient id="t1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2d3436"/><stop offset="100%" stop-color="#636e72"/></linearGradient>
+    <linearGradient id="t2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#0652DD"/><stop offset="100%" stop-color="#1B1464"/></linearGradient>
+    <linearGradient id="t3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#6C5CE7"/><stop offset="100%" stop-color="#341f97"/></linearGradient>
+    <linearGradient id="t4" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#e84393"/><stop offset="100%" stop-color="#6c2b6b"/></linearGradient>
+    <linearGradient id="t5" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f39c12"/><stop offset="100%" stop-color="#e74c3c"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="900" height="380" fill="url(#bg)" rx="16"/>
+
+  <text x="450" y="35" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="700" letter-spacing="3" filter="url(#glow)">T1 → T5: EVOLUTIONARY TIERS</text>
+  <text x="450" y="53" text-anchor="middle" fill="#ffffff" font-size="10" opacity="0.4" letter-spacing="2">Each tier adds one primitive the tier below cannot express</text>
+
+  <!-- T1 -->
+  <rect x="50" y="70" width="60" height="50" rx="8" fill="url(#t1)"/>
+  <text x="80" y="92" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="800">T1</text>
+  <text x="80" y="108" text-anchor="middle" fill="#b2bec3" font-size="8">Fixed</text>
+
+  <rect x="120" y="70" width="730" height="50" rx="8" fill="#2d3436" opacity="0.3"/>
+  <line x1="130" y1="87" x2="520" y2="87" stroke="#b2bec3" stroke-width="1" opacity="0.3"/>
+  <text x="140" y="90" fill="#b2bec3" font-size="11">Static routing · deterministic edges · no model in control flow</text>
+  <text x="140" y="108" fill="#b2bec3" font-size="10" opacity="0.6">Structural proteins — do their job without regulation</text>
+
+  <!-- T2 -->
+  <rect x="50" y="130" width="60" height="50" rx="8" fill="url(#t2)"/>
+  <text x="80" y="152" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="800">T2</text>
+  <text x="80" y="168" text-anchor="middle" fill="#74b9ff" font-size="8">Loop</text>
+
+  <rect x="120" y="130" width="730" height="50" rx="8" fill="#0652DD" opacity="0.2"/>
+  <line x1="130" y1="147" x2="620" y2="147" stroke="#74b9ff" stroke-width="1" opacity="0.3"/>
+  <text x="140" y="150" fill="#74b9ff" font-size="11">Single agent loop · |U| <= 1 · think → act → observe → repeat</text>
+  <text x="140" y="168" fill="#74b9ff" font-size="10" opacity="0.6">Single transcription unit — one RNA polymerase, one template</text>
+
+  <!-- T3 -->
+  <rect x="50" y="190" width="60" height="50" rx="8" fill="url(#t3)"/>
+  <text x="80" y="212" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="800">T3</text>
+  <text x="80" y="228" text-anchor="middle" fill="#a29bfe" font-size="8">Graph</text>
+
+  <rect x="120" y="190" width="730" height="50" rx="8" fill="#6C5CE7" opacity="0.2"/>
+  <line x1="130" y1="207" x2="730" y2="207" stroke="#a29bfe" stroke-width="1" opacity="0.3"/>
+  <text x="140" y="210" fill="#a29bfe" font-size="11">Multi-agent · Org Graph + Work Graph · explicit state · |U| >= 1</text>
+  <text x="140" y="228" fill="#a29bfe" font-size="10" opacity="0.6">Gene regulatory network — multiple transcription units, coordinated</text>
+
+  <!-- T4 -->
+  <rect x="50" y="250" width="60" height="50" rx="8" fill="url(#t4)"/>
+  <text x="80" y="272" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="800">T4</text>
+  <text x="80" y="288" text-anchor="middle" fill="#fd79a8" font-size="8">Adapt</text>
+
+  <rect x="120" y="250" width="730" height="50" rx="8" fill="#e84393" opacity="0.15"/>
+  <line x1="130" y1="267" x2="610" y2="267" stroke="#fd79a8" stroke-width="1" opacity="0.3"/>
+  <text x="140" y="270" fill="#fd79a8" font-size="11">Self-sensing · auto-tuning · graph monitors own performance</text>
+  <text x="140" y="288" fill="#fd79a8" font-size="10" opacity="0.6">Epigenetic regulation — histone modifications, change expression patterns</text>
+
+  <!-- T5 -->
+  <rect x="50" y="310" width="60" height="50" rx="8" fill="url(#t5)"/>
+  <text x="80" y="332" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="800">T5</text>
+  <text x="80" y="348" text-anchor="middle" fill="#f5a623" font-size="8">Evolve</text>
+
+  <rect x="120" y="310" width="730" height="50" rx="8" fill="#f39c12" opacity="0.15"/>
+  <line x1="130" y1="327" x2="740" y2="327" stroke="#f5a623" stroke-width="1" opacity="0.3"/>
+  <text x="140" y="330" fill="#f5a623" font-size="11">Self-rewriting graph · meiosis · topology evolution across generations</text>
+  <text x="140" y="348" fill="#f5a623" font-size="10" opacity="0.6">Natural selection — the genome changes across generations</text>
+
+</svg>

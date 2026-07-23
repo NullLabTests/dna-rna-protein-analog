@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 260" font-family="system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0f0c29"/><stop offset="100%" stop-color="#24243e"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <marker id="arrowG" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto"><polygon points="0 0, 6 2, 0 4" fill="#a29bfe"/></marker>
+    <marker id="arrowR" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto"><polygon points="0 0, 6 2, 0 4" fill="#ff6b6b"/></marker>
+    <marker id="arrowY" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto"><polygon points="0 0, 6 2, 0 4" fill="#f5a623"/></marker>
+  </defs>
+  <rect width="900" height="260" fill="url(#bg)" rx="16"/>
+
+  <text x="225" y="30" text-anchor="middle" fill="#ff6b6b" font-size="14" font-weight="700" filter="url(#glow)">LOOP</text>
+  <text x="675" y="30" text-anchor="middle" fill="#a29bfe" font-size="14" font-weight="700" filter="url(#glow)">GRAPH</text>
+
+  <!-- Loop side -->
+  <ellipse cx="225" cy="110" rx="80" ry="40" fill="none" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="6,3" opacity="0.3"/>
+  <ellipse cx="225" cy="110" rx="80" ry="40" fill="#ff6b6b" opacity="0.06"/>
+  <circle cx="225" cy="110" r="10" fill="#ff6b6b" opacity="0.8"/>
+  <text x="225" y="114" text-anchor="middle" fill="#fff" font-size="9" font-weight="600">AGENT</text>
+
+  <!-- Loop arrows -->
+  <path d="M270 85 Q310 60 320 110 Q330 160 295 135" stroke="#ff6b6b" fill="none" stroke-width="1.5" opacity="0.5" marker-end="url(#arrowR)"/>
+  <path d="M180 85 Q140 60 130 110 Q120 160 155 135" stroke="#ff6b6b" fill="none" stroke-width="1.5" opacity="0.5" marker-end="url(#arrowR)" transform="rotate(-10,225,110)"/>
+
+  <text x="225" y="175" text-anchor="middle" fill="#ff6b6b" font-size="10" opacity="0.6">think → act → observe → repeat</text>
+  <text x="225" y="205" text-anchor="middle" fill="#ffffff" font-size="9" opacity="0.3">|U| ≤ 1 · opaque scheduler</text>
+
+  <!-- Divider -->
+  <line x1="450" y1="20" x2="450" y2="240" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+  <text x="450" y="130" text-anchor="middle" fill="#ffffff" font-size="20" opacity="0.1">⟷</text>
+
+  <!-- Graph side -->
+  <!-- Node 1 -->
+  <rect x="530" y="55" width="100" height="35" rx="6" fill="#6C5CE7" opacity="0.3" stroke="#a29bfe" stroke-width="1"/>
+  <text x="580" y="77" text-anchor="middle" fill="#a29bfe" font-size="10" font-weight="600">Node A</text>
+  <!-- Node 2 -->
+  <rect x="530" y="125" width="100" height="35" rx="6" fill="#e94560" opacity="0.3" stroke="#ff6b6b" stroke-width="1"/>
+  <text x="580" y="147" text-anchor="middle" fill="#ff6b6b" font-size="10" font-weight="600">Node B</text>
+  <!-- Node 3 -->
+  <rect x="695" y="55" width="100" height="35" rx="6" fill="#48dbfb" opacity="0.3" stroke="#48dbfb" stroke-width="1"/>
+  <text x="745" y="77" text-anchor="middle" fill="#48dbfb" font-size="10" font-weight="600">Node C</text>
+  <!-- Node 4 -->
+  <rect x="695" y="125" width="100" height="35" rx="6" fill="#f5a623" opacity="0.3" stroke="#f5a623" stroke-width="1"/>
+  <text x="745" y="147" text-anchor="middle" fill="#f5a623" font-size="10" font-weight="600">Node D</text>
+
+  <!-- Edges -->
+  <line x1="630" y1="72" x2="695" y2="72" stroke="#a29bfe" stroke-width="1.5" marker-end="url(#arrowG)"/>
+  <line x1="630" y1="142" x2="695" y2="142" stroke="#a29bfe" stroke-width="1.5" marker-end="url(#arrowG)"/>
+  <line x1="580" y1="90" x2="580" y2="125" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#arrowR)"/>
+  <line x1="745" y1="90" x2="745" y2="125" stroke="#f5a623" stroke-width="1" marker-end="url(#arrowY)"/>
+  <line x1="695" y1="72" x2="630" y2="142" stroke="#48dbfb" stroke-width="0.8" stroke-dasharray="2,3" opacity="0.4"/>
+
+  <!-- State box -->
+  <rect x="580" y="180" width="180" height="25" rx="4" fill="#ffffff" opacity="0.05" stroke="#ffffff" stroke-width="0.5" stroke-opacity="0.2"/>
+  <text x="670" y="197" text-anchor="middle" fill="#ffffff" font-size="9" opacity="0.5">Shared State (checkpointed)</text>
+
+  <text x="670" y="230" text-anchor="middle" fill="#ffffff" font-size="9" opacity="0.3">|U| ≥ 1 · explict topology · typed edges</text>
+</svg>

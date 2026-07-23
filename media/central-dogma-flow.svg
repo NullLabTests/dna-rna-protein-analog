@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" font-family="system-ui, sans-serif">
+  <defs>
+    <linearGradient id="dna" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff6b6b"/><stop offset="100%" stop-color="#ee5a24"/></linearGradient>
+    <linearGradient id="rna" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#48dbfb"/><stop offset="100%" stop-color="#0abde3"/></linearGradient>
+    <linearGradient id="prot" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff9ff3"/><stop offset="100%" stop-color="#f368e0"/></linearGradient>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0f0c29"/><stop offset="50%" stop-color="#302b63"/><stop offset="100%" stop-color="#24243e"/></linearGradient>
+    <linearGradient id="arrow1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ee5a24"/><stop offset="100%" stop-color="#48dbfb"/></linearGradient>
+    <linearGradient id="arrow2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#0abde3"/><stop offset="100%" stop-color="#ff9ff3"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="900" height="320" fill="url(#bg)" rx="16"/>
+
+  <!-- Title -->
+  <text x="450" y="38" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="700" letter-spacing="4" filter="url(#glow)">CENTRAL DOGMA → AGENT FLOW</text>
+  <line x1="180" y1="50" x2="720" y2="50" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1"/>
+
+  <!-- Biology layer -->
+  <text x="30" y="80" fill="#aaaaaa" font-size="11" font-weight="600" letter-spacing="2">BIOLOGY</text>
+
+  <!-- DNA box -->
+  <rect x="30" y="95" width="190" height="60" rx="10" fill="url(#dna)" opacity="0.9"/>
+  <text x="125" y="119" text-anchor="middle" fill="#fff" font-size="22" font-weight="800">DNA</text>
+  <text x="125" y="139" text-anchor="middle" fill="#fff" font-size="11" opacity="0.85">Stable genetic storage</text>
+
+  <!-- Arrow DNA→RNA -->
+  <line x1="220" y1="125" x2="300" y2="125" stroke="url(#arrow1)" stroke-width="3" marker-end="url(#arrowhead1)"/>
+  <defs><marker id="arrowhead1" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#48dbfb"/></marker></defs>
+  <text x="260" y="115" text-anchor="middle" fill="#48dbfb" font-size="9" font-weight="600">Transcription</text>
+
+  <!-- RNA box -->
+  <rect x="310" y="95" width="190" height="60" rx="10" fill="url(#rna)" opacity="0.9"/>
+  <text x="405" y="119" text-anchor="middle" fill="#fff" font-size="22" font-weight="800">RNA</text>
+  <text x="405" y="139" text-anchor="middle" fill="#fff" font-size="11" opacity="0.85">Transient message</text>
+
+  <!-- Arrow RNA→Protein -->
+  <line x1="500" y1="125" x2="580" y2="125" stroke="url(#arrow2)" stroke-width="3"/>
+  <defs><marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#ff9ff3"/></marker></defs>
+  <text x="540" y="115" text-anchor="middle" fill="#ff9ff3" font-size="9" font-weight="600">Translation</text>
+
+  <!-- Protein box -->
+  <rect x="590" y="95" width="190" height="60" rx="10" fill="url(#prot)" opacity="0.9"/>
+  <text x="685" y="119" text-anchor="middle" fill="#fff" font-size="22" font-weight="800">Protein</text>
+  <text x="685" y="139" text-anchor="middle" fill="#fff" font-size="11" opacity="0.85">Functional machinery</text>
+
+  <!-- Divider -->
+  <line x1="30" y1="175" x2="870" y2="175" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+  <text x="450" y="195" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="600" letter-spacing="6" opacity="0.3">⏺  ISOMORPHIC MAPPING  ⏺</text>
+  <line x1="30" y1="205" x2="870" y2="205" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+
+  <!-- AI layer label -->
+  <text x="30" y="228" fill="#aaaaaa" font-size="11" font-weight="600" letter-spacing="2">AI AGENT</text>
+
+  <!-- AI DNA box -->
+  <rect x="30" y="242" width="190" height="60" rx="10" fill="url(#dna)" opacity="0.6"/>
+  <text x="125" y="266" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Weights · Config · Tools</text>
+  <text x="125" y="286" text-anchor="middle" fill="#fff" font-size="11" opacity="0.7">The invariant substrate</text>
+
+  <!-- AI Arrow -->
+  <line x1="220" y1="272" x2="300" y2="272" stroke="url(#arrow1)" stroke-width="2" opacity="0.5"/>
+  <text x="260" y="262" text-anchor="middle" fill="#48dbfb" font-size="9" opacity="0.6">Session start</text>
+
+  <!-- AI RNA box -->
+  <rect x="310" y="242" width="190" height="60" rx="10" fill="url(#rna)" opacity="0.6"/>
+  <text x="405" y="266" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Context · Memory · RAG</text>
+  <text x="405" y="286" text-anchor="middle" fill="#fff" font-size="11" opacity="0.7">The transient transcript</text>
+
+  <!-- AI Arrow -->
+  <line x1="500" y1="272" x2="580" y2="272" stroke="url(#arrow2)" stroke-width="2" opacity="0.5"/>
+  <text x="540" y="262" text-anchor="middle" fill="#ff9ff3" font-size="9" opacity="0.6">Action parse</text>
+
+  <!-- AI Protein box -->
+  <rect x="590" y="242" width="190" height="60" rx="10" fill="url(#prot)" opacity="0.6"/>
+  <text x="685" y="266" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Output · Tools · API</text>
+  <text x="685" y="286" text-anchor="middle" fill="#fff" font-size="11" opacity="0.7">The functional effect</text>
+
+  <!-- Reverse transcription hint -->
+  <path d="M770 272 Q830 272 830 240 Q830 125 770 125" stroke="#ffd32a" fill="none" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.4"/>
+  <text x="840" y="200" text-anchor="middle" fill="#ffd32a" font-size="9" opacity="0.5" transform="rotate(90,840,200)">Fine-tuning (reverse transcription)</text>
+</svg>
