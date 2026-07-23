@@ -3,7 +3,8 @@
 </p>
 
 <p align="center">
-  <b>Biology's Central Dogma as a map for the Prompt → Loop → Graph → Evolution trajectory of AI agents.</b>
+  <b>Biology's Central Dogma as a map for the Prompt → Loop → Graph → Evolution trajectory of AI agents.</b><br>
+  <sub>A <b>harness skill</b> — load it into opencode, Claude Code, or Codex CLI to ground agent architecture decisions in biological reasoning.</sub>
 </p>
 
 <p align="center">
@@ -12,7 +13,39 @@
 
 ---
 
-**polymer** is a concept framework, skill prototype, and research scaffold that argues the central dogma of molecular biology (DNA → RNA → Protein) describes the same information-flow architecture emerging across AI agent evolution — from simple prompts through loops and graphs toward self-evolving digital organisms.
+**polymer** is a **harness skill** (first), concept framework (second), and research scaffold (third). It argues the central dogma of molecular biology (DNA → RNA → Protein) describes the same information-flow architecture emerging across AI agent evolution — from simple prompts through loops and graphs toward self-evolving digital organisms.
+
+Unlike a library or runtime, a harness skill is a **loadable behavioral lens**: inject the prompt from `SKILL.md` into your coding agent's system prompt, and it will reason about task decomposition, failure modes, and architecture through the biological central-dogma hierarchy. Works with opencode, Claude Code, Codex CLI, and any harness that supports system-prompt injection or skill definitions.
+
+## 🧬 Quickstart — use as a harness skill
+
+### Option A: opencode
+
+```json
+// opencode.json (in your project root)
+{
+  "skills": [{
+    "name": "polymer",
+    "description": "Central-dogma reasoning for agent architecture",
+    "location": "path/to/SKILL.md"
+  }]
+}
+```
+
+### Option B: Claude Code / Codex CLI
+
+```
+# Paste this in your CLAUDE.md or .cursorrules:
+#
+# You have access to the polymer skill. Before any multi-step
+# task, run the 6-layer check: DNA (invariant) → RNA (context)
+# → Protein (action) → Regulation (gates) → Graph (topology)
+# → Evolution (feedback). See SKILL.md for full prompt.
+```
+
+### Option C: Direct injection
+
+Copy the entire core prompt block from `SKILL.md` (lines 16-51) into your agent's system prompt. The 6-layer check runs automatically before task decomposition.
 
 ## The isomorphic mapping
 

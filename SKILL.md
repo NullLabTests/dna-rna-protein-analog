@@ -1,6 +1,9 @@
 # polymer — Harness Skill
 
-A skill for coding-agent harnesses (opencode, Claude Code, Codex CLI) that grounds agent architecture decisions in biological central-dogma reasoning.
+**A skill is not a library. It is a loadable behavioral lens.**  
+Inject the prompt block below into your harness (opencode, Claude Code, Codex CLI). The agent will then reason about architecture through the biological central-dogma hierarchy — automatically checking the 6 layers before every multi-step task.
+
+A skill for coding-agent harnesses that grounds agent architecture decisions in biological central-dogma reasoning.
 
 ## When to load
 
