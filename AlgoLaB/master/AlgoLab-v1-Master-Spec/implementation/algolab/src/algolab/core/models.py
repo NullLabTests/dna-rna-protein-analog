@@ -163,21 +163,25 @@ class Experiment(BaseModel):
         return self
 
 
+RunStatus = Literal[
+    "CREATED", "QUEUED", "CLAIMED", "STARTING", "RUNNING",
+    "SUCCEEDED", "FAILED", "CANCELLED", "ORPHANED",
+]
+
+
 class Run(BaseModel):
-    """One pinned execution (MASTER_SPEC.md §3). Provisional v1 contract."""
+    """One pinned execution (M1 lifecycle; M1_PLAN.md §3)."""
 
     model_config = {"extra": "forbid"}
 
     id: str
     experiment_id: str
+    candidate_id: str | None = None
+    is_baseline: bool = False
     seed: int
+    workload: str = "quadratic_optimizer"
     config: dict[str, Any] = Field(default_factory=dict)
-    environment_digest: str | None = None
-    status: Literal[
-        "pending", "running", "completed", "failed", "cancelled"
-    ] = "pending"
-    credits_spent: float = 0.0
-    notes: list[str] = Field(default_factory=list)
+    status: RunStatus = "CREATED"
 
     @field_validator("id")
     @classmethod
@@ -189,11 +193,11 @@ class Run(BaseModel):
     def _exp_id(cls, v: str) -> str:
         return require(v, "EXP")
 
-    @field_validator("credits_spent")
+    @field_validator("candidate_id")
     @classmethod
-    def _credits(cls, v: float) -> float:
-        if v < 0:
-            raise ValueError("credits_spent must be non-negative")
+    def _cand_id(cls, v: str | None) -> str | None:
+        if v is not None:
+            require(v, "CAND")
         return v
 
 

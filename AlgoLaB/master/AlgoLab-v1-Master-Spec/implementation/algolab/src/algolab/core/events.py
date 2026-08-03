@@ -23,10 +23,15 @@ EntityType = Literal[
 Mutation = Literal[
     "created",
     "status_changed",
+    "transition_rejected",
+    "claimed",
+    "cancel_requested",
+    "expanded",
     "grant",
     "reserve",
     "charge",
     "release",
+    "overrun",
 ]
 
 
