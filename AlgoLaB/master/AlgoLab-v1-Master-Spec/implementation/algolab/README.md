@@ -67,7 +67,22 @@ algolab list-runs [--status S] [--json]
 algolab show-run RUN_ID | cancel-run RUN_ID
 algolab audit-log [--json]
 algolab worker [--poll-interval SECONDS]
+algolab search-run EXP_ID [--dir DIR] [--budget N] [--trials N] [--episodes N]
+                [--prior-attempts N] [--top-k K] [--force] [--json]
 ```
+
+### `search-run` (protocol 230)
+
+Runs the pre-registered A/B/C cumulative-search policy comparison against the
+deterministic toy environment: Statistic (A) vs Knowledge-informed (B) vs
+Adaptive (C), plus a Random reference and two ablations (`c-permuted`,
+`b-shuffled`), under identical budgets, task rotation, and seeds. Artifacts
+(manifest, knowledge snapshot, per-condition raw events and operator
+selections, statistics, report) are written to `--dir`, and every attempt is
+persisted to schema-v3 tables (`tasks`, `evidence`, `operator_uses`,
+`search_episodes`) with the `operator_stats` aggregate refreshed. The manifest
+freezes before any episode runs; an existing artifact directory is refused
+unless `--force` is passed.
 
 ## Package layout
 
@@ -79,6 +94,7 @@ src/algolab/
   execution/     worker, queue, expansion, aggregation, recovery, artifacts, errors
   workloads/     adapter interface + deterministic quadratic_optimizer workload
   knowledge/     evidence records, M4 operator catalog, skill registry
+  search/        protocol-230 toy environment, policies, A/B/C comparison harness
   statistics.py  deterministic inference: bootstrap CI, Welch's t, Cohen's d, FDR
   util.py        shared utilities
   schemas/       canonical JSON Schemas (byte-identical copies)
