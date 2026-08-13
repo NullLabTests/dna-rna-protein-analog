@@ -1,7 +1,10 @@
 """SQLite connection factory and schema (MASTER_SPEC.md §12, 100 §Data Plane).
 
 Append-only is enforced at the database level: UPDATE/DELETE on ``events``
-and ``ledger_entries`` are rejected by triggers (fail closed).
+and ``ledger_entries`` are rejected by triggers (fail closed). Schema v3
+adds the evidence archive (tasks, evidence, operator usage, search
+episodes) whose scientific records are append-only as well; ``operator_stats``
+is a derived aggregate recomputed from ``operator_uses``.
 """
 
 from __future__ import annotations
@@ -9,7 +12,7 @@ from __future__ import annotations
 import sqlite3
 from pathlib import Path
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS events (
@@ -97,8 +100,7 @@ END;
 
 # Schema v2 (M1 execution core): runs leave the entities table and gain
 # structured queue mechanics; expansions record idempotent expansion events.
-_V2_MIGRATION = """
-CREATE TABLE IF NOT EXISTS runs (
+_V2_MIGRATION = """CREATE TABLE IF NOT EXISTS runs (
     run_id TEXT PRIMARY KEY,
     experiment_id TEXT NOT NULL REFERENCES entities(entity_id),
     candidate_id TEXT REFERENCES entities(entity_id),
@@ -146,7 +148,151 @@ CREATE TABLE IF NOT EXISTS expansions (
 );
 """
 
-_MIGRATIONS: dict[int, str] = {2: _V2_MIGRATION}
+# Schema v3 (cumulative evidence archive): benchmark tasks, structured
+# scientific evidence records, per-use operator logs, and search episodes.
+# Scientific records (tasks, evidence, operator_uses) are append-only;
+# operator_stats is a derived aggregate.
+_V3_MIGRATION = """
+CREATE TABLE IF NOT EXISTS tasks (
+    task_id TEXT PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    family TEXT NOT NULL,
+    workload TEXT NOT NULL,
+    description TEXT NOT NULL,
+    baseline_config TEXT NOT NULL,
+    search_space TEXT NOT NULL,
+    seeds TEXT NOT NULL,
+    primary_metric TEXT NOT NULL,
+    direction TEXT NOT NULL,
+    promotion_threshold REAL NOT NULL,
+    ground_truth TEXT,
+    credit_estimate REAL NOT NULL,
+    created_at TEXT NOT NULL,
+    producer TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS evidence (
+    evidence_id TEXT PRIMARY KEY,
+    task_id TEXT NOT NULL REFERENCES tasks(task_id),
+    experiment_id TEXT NOT NULL,
+    hypothesis_id TEXT NOT NULL,
+    candidate_id TEXT NOT NULL,
+    episode_id TEXT,
+    operator_name TEXT NOT NULL,
+    policy TEXT NOT NULL,
+    primary_metric TEXT NOT NULL,
+    direction TEXT NOT NULL,
+    baseline_mean REAL,
+    candidate_mean REAL,
+    relative_delta REAL,
+    ci_low REAL,
+    ci_high REAL,
+    p_value REAL,
+    effect_size REAL,
+    promotion_threshold REAL NOT NULL,
+    outcome TEXT NOT NULL,
+    credits_charged REAL NOT NULL,
+    novelty INTEGER NOT NULL,
+    replication_status TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    producer TEXT NOT NULL,
+    payload TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_evidence_task ON evidence (task_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_evidence_outcome ON evidence (outcome, created_at);
+CREATE INDEX IF NOT EXISTS idx_evidence_family ON evidence (task_id, operator_name);
+
+CREATE TABLE IF NOT EXISTS operator_uses (
+    use_id TEXT PRIMARY KEY,
+    operator_name TEXT NOT NULL,
+    task_id TEXT NOT NULL,
+    experiment_id TEXT NOT NULL,
+    episode_id TEXT,
+    outcome TEXT NOT NULL,
+    relative_delta REAL,
+    credits_charged REAL NOT NULL,
+    novel INTEGER NOT NULL,
+    created_at TEXT NOT NULL,
+    producer TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_operator_uses_name ON operator_uses (operator_name);
+
+CREATE TABLE IF NOT EXISTS operator_stats (
+    operator_name TEXT PRIMARY KEY,
+    attempts INTEGER NOT NULL,
+    invalid_count INTEGER NOT NULL,
+    success_count INTEGER NOT NULL,
+    replicated_success_count INTEGER NOT NULL,
+    sum_effect REAL NOT NULL,
+    sum_effect_sq REAL NOT NULL,
+    total_credits REAL NOT NULL,
+    novelty_count INTEGER NOT NULL,
+    updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS search_episodes (
+    episode_id TEXT PRIMARY KEY,
+    task_id TEXT NOT NULL,
+    policy TEXT NOT NULL,
+    budget_credits REAL NOT NULL,
+    credits_charged REAL NOT NULL,
+    attempts INTEGER NOT NULL,
+    discoveries INTEGER NOT NULL,
+    failure_counts TEXT NOT NULL,
+    operator_use_counts TEXT NOT NULL,
+    started_at TEXT NOT NULL,
+    finished_at TEXT NOT NULL,
+    seed INTEGER NOT NULL,
+    producer TEXT NOT NULL,
+    payload TEXT NOT NULL
+);
+
+CREATE TRIGGER IF NOT EXISTS tasks_no_update
+BEFORE UPDATE ON tasks
+BEGIN
+    SELECT RAISE(ABORT, 'append-only violation: UPDATE on tasks is forbidden');
+END;
+CREATE TRIGGER IF NOT EXISTS tasks_no_delete
+BEFORE DELETE ON tasks
+BEGIN
+    SELECT RAISE(ABORT, 'append-only violation: DELETE on tasks is forbidden');
+END;
+CREATE TRIGGER IF NOT EXISTS evidence_no_update
+BEFORE UPDATE ON evidence
+BEGIN
+    SELECT RAISE(ABORT, 'append-only violation: UPDATE on evidence is forbidden');
+END;
+CREATE TRIGGER IF NOT EXISTS evidence_no_delete
+BEFORE DELETE ON evidence
+BEGIN
+    SELECT RAISE(ABORT, 'append-only violation: DELETE on evidence is forbidden');
+END;
+CREATE TRIGGER IF NOT EXISTS operator_uses_no_update
+BEFORE UPDATE ON operator_uses
+BEGIN
+    SELECT RAISE(ABORT, 'append-only violation: UPDATE on operator_uses is forbidden');
+END;
+CREATE TRIGGER IF NOT EXISTS operator_uses_no_delete
+BEFORE DELETE ON operator_uses
+BEGIN
+    SELECT RAISE(ABORT, 'append-only violation: DELETE on operator_uses is forbidden');
+END;
+CREATE TRIGGER IF NOT EXISTS search_episodes_no_update
+BEFORE UPDATE ON search_episodes
+BEGIN
+    SELECT RAISE(ABORT, 'append-only violation: UPDATE search_episodes forbidden');
+END;
+CREATE TRIGGER IF NOT EXISTS search_episodes_no_delete
+BEFORE DELETE ON search_episodes
+BEGIN
+    SELECT RAISE(ABORT, 'append-only violation: DELETE search_episodes forbidden');
+END;
+"""
+
+_MIGRATIONS: dict[int, str] = {
+    2: _V2_MIGRATION,
+    3: _V3_MIGRATION,
+}
 
 
 class DatabaseError(RuntimeError):
@@ -203,9 +349,13 @@ def init_schema(conn: sqlite3.Connection) -> None:
 
 def check_append_only(conn: sqlite3.Connection) -> None:
     """Verify the append-only triggers are installed (defense in depth)."""
-    row = conn.execute(
-        "SELECT sql FROM sqlite_master WHERE type = 'trigger' "
-        "AND name = 'events_no_update'"
-    ).fetchone()
-    if row is None:
-        raise DatabaseError("events_no_update trigger is missing; refusing to proceed")
+    for name in ("events_no_update", "evidence_no_update"):
+        row = conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type = 'trigger' "
+            "AND name = ?",
+            (name,),
+        ).fetchone()
+        if row is None:
+            raise DatabaseError(
+                f"{name} trigger is missing; refusing to proceed"
+            )

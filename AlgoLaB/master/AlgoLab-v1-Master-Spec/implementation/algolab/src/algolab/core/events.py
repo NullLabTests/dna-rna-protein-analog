@@ -17,6 +17,9 @@ EntityType = Literal[
     "result",
     "discovery",
     "report",
+    "task",
+    "evidence",
+    "episode",
     "budget",
 ]
 
@@ -32,6 +35,9 @@ Mutation = Literal[
     "charge",
     "release",
     "overrun",
+    "evidence_recorded",
+    "episode_started",
+    "episode_finished",
 ]
 
 

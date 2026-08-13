@@ -244,7 +244,10 @@ class ExperimentExpansion:
             ))
 
         for baseline_id in experiment.baseline_ids:
-            config = adapter.config_from_changes([{"baseline": baseline_id}])
+            changes = experiment.baseline_configs.get(baseline_id)
+            if changes is None:
+                changes = [{"baseline": baseline_id}]
+            config = adapter.config_from_changes(changes)
             for seed in experiment.seeds:
                 add(seed, config, None, True)
         for candidate_id in experiment.candidate_ids:

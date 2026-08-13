@@ -129,6 +129,11 @@ class Experiment(BaseModel):
     hypothesis_ids: list[str] = Field(min_length=1)
     candidate_ids: list[str] = Field(default_factory=list)
     baseline_ids: list[str] = Field(min_length=1)
+    baseline_configs: dict[str, list[dict[str, Any]]] = Field(
+        default_factory=dict,
+        description="optional per-baseline workload changes; keys must be "
+                    "baseline_ids",
+    )
     primary_metric: str
     secondary_metrics: list[str] = Field(default_factory=list)
     seeds: list[int] = Field(min_length=3)
@@ -160,6 +165,12 @@ class Experiment(BaseModel):
             value = budget.get(key)
             if not isinstance(value, (int, float)) or value < 0:
                 raise ValueError(f"budget.{key} must be a non-negative number")
+        unknown = set(self.baseline_configs) - set(self.baseline_ids)
+        if unknown:
+            raise ValueError(
+                f"baseline_configs keys must appear in baseline_ids; "
+                f"unknown: {sorted(unknown)}"
+            )
         return self
 
 

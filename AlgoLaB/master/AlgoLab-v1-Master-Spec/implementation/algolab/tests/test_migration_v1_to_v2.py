@@ -5,11 +5,11 @@ import pytest
 from algolab.storage.db import SCHEMA_VERSION, apply_schema, connect
 
 
-def test_fresh_database_is_v2(tmp_path) -> None:
+def test_fresh_database_is_current_version(tmp_path) -> None:
     conn = connect(str(tmp_path / "fresh.sqlite3"), initialize=True)
     version = conn.execute("PRAGMA user_version").fetchone()[0]
-    assert version == SCHEMA_VERSION == 2
-    for table in ("runs", "expansions"):
+    assert version == SCHEMA_VERSION == 3
+    for table in ("runs", "expansions", "evidence", "tasks"):
         row = conn.execute(
             "SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?",
             (table,),
