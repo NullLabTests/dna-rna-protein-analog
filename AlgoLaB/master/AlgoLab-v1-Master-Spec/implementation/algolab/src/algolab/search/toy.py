@@ -19,11 +19,12 @@ from dataclasses import dataclass
 
 from algolab.knowledge.operators import OPERATOR_BUDGETS, OPERATOR_CATALOG
 
-TOY_ENVIRONMENT_VERSION = "1.0.0"
-TASK_SUITE_VERSION = "1.0.0"
+TOY_ENVIRONMENT_VERSION = "1.1.0"
+TASK_SUITE_VERSION = "1.1.0"
 DISCOVERY_GATE_VERSION = "1.0.0"
 
 TASK_FAMILIES: tuple[str, ...] = ("alpha", "beta")
+HELD_OUT_FAMILY: str = "gamma"
 
 PROMOTION_THRESHOLD = 0.15      # effect must be >= this on the primary metric
 EFFECT_SIGMA = 0.12             # measurement noise
@@ -31,6 +32,11 @@ VALIDATION_PROBABILITY = 0.90   # P(implementation is valid)
 
 # Hidden ground truth per family (versioned; never exposed to policies).
 # mu_useful / mu_neutral / mu_harmful.
+# gamma is the held-out family: never seen by prior (K0), so B and C receive
+# no information about it before evaluation.  It has a different useful
+# operator set from alpha/beta, providing evidence on whether the adaptive
+# advantage transfers beyond training families (though it does not by itself
+# rule out all forms of benchmark-specific adaptation).
 _GROUND_TRUTH: dict[str, dict[str, float]] = {
     "alpha": {
         "tune": 0.35, "decompose": 0.35, "validate": 0.35,
@@ -40,6 +46,11 @@ _GROUND_TRUTH: dict[str, dict[str, float]] = {
     "beta": {
         "reparameterize": 0.35, "synthesize": 0.35, "refresh": 0.35,
         "tune": 0.02, "decompose": 0.02, "validate": 0.02,
+        "polyglot": -0.35, "rollback": -0.35,
+    },
+    "gamma": {
+        "decompose": 0.35, "reparameterize": 0.35, "refresh": 0.35,
+        "tune": 0.02, "validate": 0.02, "synthesize": 0.02,
         "polyglot": -0.35, "rollback": -0.35,
     },
 }
@@ -125,6 +136,7 @@ __all__ = [
     "TASK_SUITE_VERSION",
     "DISCOVERY_GATE_VERSION",
     "TASK_FAMILIES",
+    "HELD_OUT_FAMILY",
     "PROMOTION_THRESHOLD",
     "EFFECT_SIGMA",
     "VALIDATION_PROBABILITY",

@@ -1,6 +1,7 @@
 # Knowledge Loop Evaluation
 
-**Status:** Draft protocol (M4 column: substrate ready; harness = M5).
+**Status:** Level 1 evidence attached (pre-registered analysis supports H1
+in toy environment). Generalisation to real workloads remains unproven.
 **Gates:** README research-loop step 10 ("update the knowledge base and
 search policy") is a **causal-loop claim under experimental validation**.
 It is not to be presented as demonstrated until this protocol's promotion
@@ -44,7 +45,9 @@ read and update.
   task's `promotion_threshold` on the primary metric and (ii) meets the
   replication gate (≥2 seeds). Aligns with M1's replication rule.
 - **Held-out family:** one task family is withheld from all arm priors;
-  B and C never see it before evaluation (tests transfer, not memorization).
+  B and C never see it before evaluation (provides evidence on transfer
+  beyond training families, though it does not rule out all forms of
+  benchmark-specific adaptation).
 
 ## 4. Metrics
 

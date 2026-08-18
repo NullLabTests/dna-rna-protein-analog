@@ -267,22 +267,33 @@ class AdaptivePolicy:
             random.Random(feedback_shuffle_seed)
             if feedback_shuffle_seed is not None else None)
         self.snapshot_id = snapshot.snapshot_id
+        self._snapshot_snapshot = snapshot
         self._alpha: dict[str, dict[str, float]] = {}
         self._beta: dict[str, dict[str, float]] = {}
+        self._known_families: set[str] = set()
         for family in ("alpha", "beta"):
-            self._alpha[family] = {
-                op: 1.0 + snapshot.successes.get(op, 0)
-                for op in operators
-            }
-            self._beta[family] = {
-                op: 1.0 + (snapshot.attempts.get(op, 0)
-                           - snapshot.successes.get(op, 0))
-                for op in operators
-            }
+            self._init_family(family, snapshot)
+
+    def _init_family(self, family: str, snapshot: KnowledgeSnapshot) -> None:
+        """Initialize Beta posteriors for *family* from the K0 snapshot."""
+        if family in self._known_families:
+            return
+        self._known_families.add(family)
+        self._alpha[family] = {
+            op: 1.0 + snapshot.successes.get(op, 0)
+            for op in self._operators
+        }
+        self._beta[family] = {
+            op: 1.0 + (snapshot.attempts.get(op, 0)
+                       - snapshot.successes.get(op, 0))
+            for op in self._operators
+        }
 
     # -- introspection (tests + reporting) -------------------------------
 
     def posterior_stats(self, family: str, operator: str) -> dict[str, float]:
+        if family not in self._known_families:
+            self._init_family(family, self._snapshot_snapshot)
         a = self._alpha[family][operator]
         b = self._beta[family][operator]
         mean = a / (a + b)
@@ -296,6 +307,8 @@ class AdaptivePolicy:
 
     def selection_distribution(self, family: str) -> dict[str, float]:
         """Current posterior means per operator for *family*."""
+        if family not in self._known_families:
+            self._init_family(family, self._snapshot_snapshot)
         return {
             op: self.posterior_stats(family, op)["mean"] for op in self._operators
         }
@@ -303,6 +316,9 @@ class AdaptivePolicy:
     # -- protocol --------------------------------------------------------
 
     def select(self, family: str, step: int) -> tuple[str, SelectionRecord]:
+        # Lazy-init posteriors for unseen families (e.g. held-out gamma).
+        if family not in self._known_families:
+            self._init_family(family, self._snapshot_snapshot)
         scores: dict[str, float] = {}
         for op in self._operators:
             a = self._alpha[family][op]
@@ -337,6 +353,8 @@ class AdaptivePolicy:
         In the permuted-outcome ablation the update lands on a seeded-random
         operator instead of the one actually tried.
         """
+        if family not in self._known_families:
+            self._init_family(family, self._snapshot_snapshot)
         if self._shuffle_rng is not None:
             operator = self._operators[
                 self._shuffle_rng.randrange(len(self._operators))]

@@ -18,8 +18,9 @@ the executable core of the platform, delivered in three milestones:
   gates which agent role may invoke which operator
   (`algolab.knowledge.registry`). The database schema is at **v3**.
 
-The test suite currently has **228 passing tests** covering unit, integration,
-and ontology-invariant acceptance behavior. `ruff` and `mypy` (strict) are clean.
+The test suite currently has **275 passing tests** covering unit, integration,
+ontology-invariant, and protocol-230 compliance behavior. `ruff` and `mypy`
+(strict) are clean.
 
 ## Quickstart
 
@@ -27,7 +28,7 @@ and ontology-invariant acceptance behavior. `ruff` and `mypy` (strict) are clean
 bash scripts/setup.sh          # venv + editable install
 make lint                      # ruff
 make type                      # mypy (strict)
-make test                      # pytest (228 tests)
+make test                      # pytest (279 tests)
 ```
 
 ## End-to-end run
@@ -127,10 +128,13 @@ docs/decisions/  architecture decision records (ADR-0001..0008)
   status; promotion claims require the statistical analysis stored with them.
 - Operators are invoked only by registered agent roles (`knowledge.registry`),
   and each invocation draws from a per-operator credit budget.
-- The causal knowledge loop (research-loop step 10) is a claim under
-  experimental validation, gated by the pre-registered A/B/C protocol in
-  `../../spec/research/230_KNOWLEDGE_LOOP_EVALUATION.md`; no documentation
-  asserts it as demonstrated until the study passes.
+- The causal knowledge loop (research-loop step 10) is supported by
+  evidence from the pre-registered A/B/C protocol
+  (`../../spec/research/230_KNOWLEDGE_LOOP_EVALUATION.md`): the adaptive
+  policy (C) outperforms both static (A) and knowledge-informed (B) with
+  adjusted p < 0.05 and the advantage transfers to the held-out family.
+  This evidence is specific to the toy environment; generalisation to real
+  workloads remains unproven.
 
 ## Documentation
 

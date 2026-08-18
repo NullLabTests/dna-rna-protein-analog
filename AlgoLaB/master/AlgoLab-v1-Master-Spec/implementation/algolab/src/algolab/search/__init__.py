@@ -29,6 +29,7 @@ from algolab.search.policies import (
 from algolab.search.toy import (
     DEFAULT_OPERATORS,
     DISCOVERY_GATE_VERSION,
+    HELD_OUT_FAMILY,
     PROMOTION_THRESHOLD,
     TASK_FAMILIES,
     TASK_SUITE_VERSION,
@@ -60,6 +61,7 @@ __all__ = [
     "StaticPolicy",
     "build_prior_snapshot",
     "DISCOVERY_GATE_VERSION",
+    "HELD_OUT_FAMILY",
     "TASK_FAMILIES",
     "TASK_SUITE_VERSION",
     "TOY_ENVIRONMENT_VERSION",
