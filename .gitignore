@@ -22,3 +22,6 @@ paper/output/
 .DS_Store
 .Xauthority
 OpenGaia/
+
+# own repos maintained elsewhere
+AlgoLaB/
